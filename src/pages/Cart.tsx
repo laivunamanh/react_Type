@@ -26,18 +26,9 @@ const CartPage = () => {
     0
   );
 
+  // Navigate to the billing page without clearing the cart
   const handleCheckout = () => {
-    setAlertMessage("Thanh toán thành công! Đang vào thanh toán.");
-    setShowAlert(true);
-
-    // Clear the cart after successful checkout
-    setCart([]);
-    localStorage.removeItem("cart");
-
-    setTimeout(() => {
-      setShowAlert(false);
-      navigate("/checkout");
-    }, 3000); // Delay navigation by 3 seconds
+    navigate("/bill"); // Directly navigate to the BillPage
   };
 
   return (
