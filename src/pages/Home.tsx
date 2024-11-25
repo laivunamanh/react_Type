@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { ProductContext } from "../contexts/ProductContext";
 import { Link } from "react-router-dom";
 import { Product } from "../interfaces/Product";
@@ -37,9 +37,11 @@ const Home = () => {
   };
 
 
-  const filteredProducts = state.products.filter((product: Product) =>
+const filteredProducts = useMemo(() => {
+  return state.products.filter((product: Product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+}, [state.products, searchTerm]);
 
   return (
     <div className="container mt-4">
