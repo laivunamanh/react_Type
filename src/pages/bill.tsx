@@ -130,6 +130,7 @@ const BillPage = () => {
               <thead className="table-light">
                 <tr>
                   <th>Sản Phẩm</th>
+                  <th>hình ảnh</th>
                   <th>Số Lượng</th>
                   <th>Giá</th>
                 </tr>
@@ -138,6 +139,7 @@ const BillPage = () => {
                 {cart.map((item) => (
                   <tr key={item.id}>
                     <td>{item.title}</td>
+                    <td><img src={item.thumbnail} width={70}/></td>
                     <td>
                       <div className="d-flex align-items-center">
                         <button
@@ -160,7 +162,7 @@ const BillPage = () => {
                 ))}
               </tbody>
             </table>
-            <div className="d-flex justify-content-between mt-3">
+            <div className="d-flex justify-content-between mt-5">
               <strong>Tổng Cộng:</strong>
               <span>${totalAmount.toFixed(2)}</span>
             </div>

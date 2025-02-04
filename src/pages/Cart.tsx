@@ -6,19 +6,28 @@ const CartPage = () => {
   const [cart, setCart] = useState<Cart[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
   );
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [errors, setErrors] = useState<{ [key: number]: string }>({});
   const navigate = useNavigate();
 
   const removeFromCart = (id: number) => {
     const updatedCart = cart.filter((item) => item.id !== id);
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
 
-    setAlertMessage("Sản phẩm đã được xóa khỏi giỏ hàng.");
-    setShowAlert(true);
+  const updateQuantity = (id: number, quantity: number) => {
+    if (isNaN(quantity) || quantity < 1) {
+      setErrors((prev) => ({ ...prev, [id]: "Số lượng phải lớn hơn 0" }));
+      return;
+    }
 
-    setTimeout(() => setShowAlert(false), 3000);
+    setErrors((prev) => ({ ...prev, [id]: "" })); // Xóa lỗi nếu nhập hợp lệ
+
+    const updatedCart = cart.map((item) =>
+      item.id === id ? { ...item, quantity } : item
+    );
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   const totalAmount = cart.reduce(
@@ -26,28 +35,13 @@ const CartPage = () => {
     0
   );
 
-  // Navigate to the billing page without clearing the cart
   const handleCheckout = () => {
-    navigate("/bill"); // Directly navigate to the BillPage
+    navigate("/bill");
   };
 
   return (
     <div className="container mt-5 text-center">
       <h2 className="mb-4">Giỏ Hàng</h2>
-      {showAlert && (
-        <div
-          className="alert alert-success alert-dismissible fade show"
-          role="alert"
-        >
-          {alertMessage}
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="alert"
-            aria-label="Close"
-          ></button>
-        </div>
-      )}
       <div className="d-flex justify-content-center">
         <table className="table table-striped table-bordered w-75">
           <thead>
@@ -56,6 +50,7 @@ const CartPage = () => {
               <th>Hình Ảnh</th>
               <th>Số Lượng</th>
               <th>Giá Sản Phẩm</th>
+              <th>Tổng Tiền</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -72,8 +67,23 @@ const CartPage = () => {
                     className="img-fluid"
                   />
                 </td>
-                <td>{item.quantity}</td>
+                <td>
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) =>
+                      updateQuantity(item.id, Number(e.target.value))
+                    }
+                    min="1"
+                    className="form-control text-center"
+                    style={{ width: "80px", display: "inline-block" }}
+                  />
+                  {errors[item.id] && (
+                    <div className="text-danger mt-1">{errors[item.id]}</div>
+                  )}
+                </td>
                 <td>${item.price.toFixed(2)}</td>
+                <td>${(item.price * item.quantity).toFixed(2)}</td>
                 <td>
                   <button
                     className="btn btn-danger"

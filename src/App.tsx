@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import ProductDetail from "./pages/ProductDetail";
 import BillPage from "./pages/bill";
 import Bills from "./pages/bills";
+import ListUser from "./pages/admin/ListUser";
 
 function App() {
 	return (
@@ -23,6 +24,9 @@ function App() {
           <Route path="/bill" element={<BillPage />} />
           <Route path="/bills" element={<Bills />} />
           <Route path="/product-detail/:id" element={<ProductDetail />} />
+          <Route path="/login" element={<AuthForm isLogin />} />
+          <Route path="/register" element={<AuthForm />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Admin */}
@@ -31,10 +35,7 @@ function App() {
           <Route path="/admin/product-add" element={<ProductForm />} />
           <Route path="/admin/product-edit/:id" element={<ProductForm />} />
         </Route>
-
-        <Route path="/login" element={<AuthForm isLogin />} />
-        <Route path="/register" element={<AuthForm />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/admin/list" element={<ListUser />} />
       </Routes>
     </>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CartItem {
   id: number;
@@ -16,6 +17,7 @@ interface BillingDetails {
 }
 
 const Bills = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [billingDetails, setBillingDetails] = useState<BillingDetails>({
     fullName: "",
@@ -89,6 +91,10 @@ const Bills = () => {
         </div>
       </div>
       <div className="text-center mt-4">
+        <button className="btn btn-primary" onClick={() => navigate("/")}>
+          Quay về
+        </button>
+        <hr></hr>
         <button className="btn btn-primary" onClick={() => window.print()}>
           In Hóa Đơn
         </button>
